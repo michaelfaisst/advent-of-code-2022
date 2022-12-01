@@ -1,9 +1,10 @@
+use aoc_2022::{read_file, solve};
+
 mod day1;
 
 fn main() {
-    println!("----------------");
-    println!("Day 1");
-    println!("----------------");
-    println!("Result 1: {}", day1::part_1());
-    println!("Result 2: {}", day1::part_2());
+    let input: String = read_file(1, false);
+
+    solve(day1::part_1, &input);
+    solve(day1::part_2, &input);
 }
