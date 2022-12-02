@@ -14,9 +14,9 @@ enum Outcome {
 
 fn parse_sign(sign_str: &str) -> Sign {
     match sign_str {
-        "A" | "X" => Sign::Rock,
-        "B" | "Y" => Sign::Paper,
-        "C" | "Z" => Sign::Scissors,
+        "A" => Sign::Rock,
+        "B" => Sign::Paper,
+        "C" => Sign::Scissors,
         _ => Sign::Rock,
     }
 }
