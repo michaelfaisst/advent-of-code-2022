@@ -6,5 +6,5 @@ fn main() {
     let input: String = read_file(3, false);
 
     solve(day3::a::solve, &input);
-    // solve(day2::b::solve, &input);
+    solve(day3::b::solve, &input);
 }
