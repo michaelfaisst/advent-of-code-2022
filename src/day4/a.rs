@@ -6,6 +6,7 @@ pub fn solve(input: &str) -> usize {
         let (first, second) = line.split_once(",").unwrap();
         let first_assignment = Assignment::from_str(first).unwrap();
         let second_assignment = Assignment::from_str(second).unwrap();
+
         let contains = first_assignment.contains_other_assignment(&second_assignment)
             || second_assignment.contains_other_assignment(&first_assignment);
 
