@@ -1,10 +1,10 @@
 use aoc_2022::{read_file, solve};
 
-mod day4;
+mod day5;
 
 fn main() {
-    let input: String = read_file(4, false);
+    let input: String = read_file(5, false);
 
-    solve(day4::a::solve, &input);
-    solve(day4::b::solve, &input);
+    solve(day5::a::solve, &input);
+    solve(day5::b::solve, &input);
 }
