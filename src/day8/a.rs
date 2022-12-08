@@ -1,28 +1,18 @@
-type Grid = Vec<Vec<u32>>;
-
-fn fill_grid(input: &str, grid: &mut Grid) {
-    let lines: Vec<&str> = input.lines().collect();
-
-    for line in lines {
-        grid.push(
-            line.chars()
-                .into_iter()
-                .map(|val| val.to_digit(10).unwrap())
-                .collect(),
-        );
-    }
-}
+use super::utils::{fill_grid, Grid};
 
 fn is_visible(grid: &Grid, row_index: usize, col_index: usize) -> bool {
     let value = grid[row_index][col_index];
 
-    let column = grid[..].iter().map(|row| row[col_index]).collect::<Vec<u32>>();
+    let column = grid[..]
+        .iter()
+        .map(|row| row[col_index])
+        .collect::<Vec<u32>>();
 
     let slices = [
         &grid[row_index][..col_index],
         &grid[row_index][col_index + 1..],
         &column[..row_index],
-        &column[row_index + 1..]
+        &column[row_index + 1..],
     ];
 
     slices.iter().any(|slice| {
