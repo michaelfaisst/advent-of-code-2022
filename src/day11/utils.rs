@@ -96,3 +96,29 @@ impl Monkey {
         return Some((next_monkey, item));
     }
 }
+
+pub fn get_monkey_business(input: &str, iterations: usize, relief: bool) -> usize {
+    let mut monkeys: Vec<Monkey> = input
+        .split("\n\n")
+        .map(|block| Monkey::from_str(block).unwrap())
+        .collect();
+
+    let lcm = monkeys.iter().map(|monkey| monkey.test_value).product::<usize>();
+
+    for _ in 0..iterations {
+        for i in 0..monkeys.len() {
+            while monkeys[i].items.len() > 0 {
+                let (next_monkey, value) =
+                    monkeys[i].execture_turn(relief).expect("should never happen");
+                monkeys[next_monkey].items.push_back(value % lcm);
+            }
+        }
+    }
+
+    monkeys.sort_by(|a, b| b.inspected_items.cmp(&a.inspected_items));
+    monkeys
+        .iter()
+        .take(2)
+        .map(|monkey| monkey.inspected_items)
+        .product::<usize>()
+}
