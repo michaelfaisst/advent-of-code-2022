@@ -1,9 +1,9 @@
 use std::{iter::zip, str::Chars};
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum Element {
     Number(u32),
-    Elem(Vec<Element>),
+    List(Vec<Element>),
 }
 
 fn parse_array(iter: &mut Chars) -> Vec<Element> {
@@ -20,7 +20,7 @@ fn parse_array(iter: &mut Chars) -> Vec<Element> {
         }
 
         if char == '[' {
-            vec.push(Element::Elem(parse_array(iter)));
+            vec.push(Element::List(parse_array(iter)));
         } else if char == ']' {
             return vec;
         } else if char.is_digit(10) {
@@ -29,13 +29,13 @@ fn parse_array(iter: &mut Chars) -> Vec<Element> {
     }
 }
 
-pub fn generate_elements(input: &str) -> Vec<Element> {
+pub fn generate_element(input: &str) -> Element {
     let mut iter = input.chars().into_iter();
     iter.next(); // skip the first [ because its not needed
-    parse_array(&mut iter)
+    Element::List(parse_array(&mut iter))
 }
 
-pub fn compare_elements(a_vec: Vec<Element>, b_vec: Vec<Element>) -> Option<bool> {
+fn compare_elements(a_vec: Vec<Element>, b_vec: Vec<Element>) -> Option<bool> {
     let lengths = (a_vec.len(), b_vec.len());
 
     for (a, b) in zip(a_vec.into_iter(), b_vec.into_iter()) {
@@ -66,11 +66,11 @@ pub fn is_valid(a: Element, b: Element) -> Option<bool> {
                     None
                 }
             }
-            Element::Elem(b_vec) => compare_elements(vec![a], b_vec),
+            Element::List(b_vec) => compare_elements(vec![a], b_vec),
         },
-        Element::Elem(a_vec) => match b {
+        Element::List(a_vec) => match b {
             Element::Number(_) => compare_elements(a_vec, vec![b]),
-            Element::Elem(b_vec) => compare_elements(a_vec, b_vec),
+            Element::List(b_vec) => compare_elements(a_vec, b_vec),
         },
     }
 }
