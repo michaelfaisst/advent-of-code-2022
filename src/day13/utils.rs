@@ -8,17 +8,23 @@ pub enum Element {
 
 fn parse_array(iter: &mut Chars) -> Vec<Element> {
     let mut vec: Vec<Element> = vec![];
+    let mut num_str: String = "".to_string();
 
     loop {
         let char = iter.next().unwrap();
+
+        if !char.is_digit(10) && num_str.len() > 0 {
+            let num = num_str.parse::<u32>().unwrap();
+            vec.push(Element::Number(num));
+            num_str.clear();
+        }
 
         if char == '[' {
             vec.push(Element::Elem(parse_array(iter)));
         } else if char == ']' {
             return vec;
         } else if char.is_digit(10) {
-            let num = char.to_digit(10).unwrap();
-            vec.push(Element::Number(num));
+            num_str.push(char);
         }
     }
 }
@@ -33,21 +39,19 @@ pub fn compare_elements(a_vec: Vec<Element>, b_vec: Vec<Element>) -> Option<bool
     let lengths = (a_vec.len(), b_vec.len());
 
     for (a, b) in zip(a_vec.into_iter(), b_vec.into_iter()) {
-        let valid = is_valid(a, b);
-
-        match valid {
+        match is_valid(a, b) {
             Some(valid) => return Some(valid),
-            None => {}
+            None => continue,
         }
     }
 
     if lengths.0 < lengths.1 {
-        return Some(true);
+        Some(true)
     } else if lengths.0 > lengths.1 {
-        return Some(false);
+        Some(false)
+    } else {
+        None
     }
-
-    return None;
 }
 
 pub fn is_valid(a: Element, b: Element) -> Option<bool> {
@@ -55,11 +59,11 @@ pub fn is_valid(a: Element, b: Element) -> Option<bool> {
         Element::Number(a_num) => match b {
             Element::Number(b_num) => {
                 if a_num < b_num {
-                    return Some(true);
+                    Some(true)
                 } else if a_num > b_num {
-                    return Some(false);
+                    Some(false)
                 } else {
-                    return None;
+                    None
                 }
             }
             Element::Elem(b_vec) => compare_elements(vec![a], b_vec),

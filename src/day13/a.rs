@@ -1,4 +1,4 @@
-use crate::day13::utils::{generate_elements, compare_elements};
+use crate::day13::utils::{compare_elements, generate_elements};
 
 pub fn solve(input: &str) -> usize {
     let pairs: Vec<&str> = input.split("\n\n").collect();
@@ -9,9 +9,10 @@ pub fn solve(input: &str) -> usize {
             .map(|test| (generate_elements(test.0), generate_elements(test.1)))
             .unwrap();
 
-        let valid = compare_elements(left, right).unwrap();
-        println!("{}", valid);
+        println!("{:?}", left);
 
-        return if valid { acc + index + 1} else { acc }
+        let valid = compare_elements(left, right).unwrap();
+
+        return if valid { acc + index + 1 } else { acc };
     })
 }
